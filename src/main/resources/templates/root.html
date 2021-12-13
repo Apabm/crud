@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" th:href="@{/photos/bg1.jpg}" type="image/x-icon"/>
+
+    <script type="text/javascript" th:src="@{/js/jquery-1.12.4.min.js}"></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+          integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+            integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
+            crossorigin="anonymous"></script>
+    <title>Title</title>
+</head>
+<body>
+
+<div>
+    <h1>欢迎使用</h1>
+</div>
+
+<div class="container">
+    <div class="col-md-offset-1">
+        <div class="row"></div>
+        <table class="table table-condensed">
+            <thead>
+            <tr>
+                <th>邀请码</th>
+            </tr>
+            </thead>
+            <tbody id="cdks">
+
+            </tbody>
+        </table>
+
+        <div class="form-group">
+            <div class="col-sm-3">
+                <input class="form-control" id="add_cdk" name="cdkNum"/>
+                <br>
+                <button type="button" class="btn btn-info" id="add_cdk_btn">添加邀请码</button>
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<script>
+    $(function () {
+        getAllCdks();
+    });
+
+
+    function getAllCdks() {
+        $("#cdks").empty();
+        $.ajax({
+            url: "/getCdks",
+            type: "get",
+            success: function (result) {
+                $.each(result.map.cdks, function (index, item) {
+
+                    var add = $("<td></td>").append(item.cdkNum)
+
+                    $("<tr></tr>").append(add).appendTo("#cdks");
+                });
+
+            }
+        });
+    }
+
+    $("#add_cdk_btn").click(function () {
+        $.ajax({
+
+            url: "/addCdk/"+$("#add_cdk").val(),
+            type: "post",
+            success:function () {
+                getAllCdks();
+            }
+        });
+    });
+
+
+</script>
+
+</body>
+</html>

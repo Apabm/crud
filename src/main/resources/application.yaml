@@ -1,0 +1,49 @@
+spring:
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+
+  datasource:
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    url: jdbc:sqlserver://localhost:1433;DatabaseName=ssm_crud
+    username: sa
+    password: abc123456
+
+    druid:
+      aop-patterns: zhytest.crud.*
+      filters: stat,wall
+
+      stat-view-servlet:
+        enabled: true
+        login-password: abc
+        login-username: admin
+
+      web-stat-filter:
+        enabled: true
+        url-pattern: /*
+        exclusions: '*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*'
+
+      filter:
+        stat:
+          slow-sql-millis: 1000
+          log-slow-sql: true
+          enabled: true
+
+        wall:
+          enabled: true
+          config:
+            drop-table-allow: false
+
+
+
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+
+pagehelper:
+  helperDialect: sqlserver
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql

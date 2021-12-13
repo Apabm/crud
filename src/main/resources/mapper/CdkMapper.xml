@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="zhytest.crud.mapper.CdkMapper">
+    <select id="countCdkByCdkNum" resultType="integer">
+        select count(*) from tbl_cdk where cdk_num=#{cdk_num}
+    </select>
+    <delete id="deleteCdkNum">
+        delete from tbl_cdk where cdk_num=#{cdk_num}
+    </delete>
+
+    <select id="getAllCdks" resultType="zhytest.crud.bean.Cdk">
+        select * from tbl_cdk
+    </select>
+    <insert id="addCdk">
+        insert into tbl_cdk(cdk_num) values (#{cdkNum})
+    </insert>
+</mapper>
