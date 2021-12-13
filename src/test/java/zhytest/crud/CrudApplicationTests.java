@@ -40,7 +40,7 @@ class CrudApplicationTests {
     @Test
     void contextLoads() {
         Admin root = adminService.selectByLoginId("root");
-        System.out.println(root);
+        System.out.println(adminService.getClass());
     }
 
 
