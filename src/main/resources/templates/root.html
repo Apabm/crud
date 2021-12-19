@@ -11,18 +11,23 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
             integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
             crossorigin="anonymous"></script>
+
     <title>Title</title>
 </head>
 <body>
 
-<div>
-    <h1>欢迎使用</h1>
+<div class="container">
+    <div class="btn-lg">
+        <span class="glyphicon glyphicon-home " aria-hidden="true"></span>
+    </div>
+
+    <h2>欢迎使用</h2>
 </div>
 
 <div class="container">
-    <div class="col-md-offset-1">
-        <div class="row"></div>
-        <table class="table table-condensed">
+    <div class="col-md-offset-1 col-sm-5">
+        <div class="row "></div>
+        <table class="table table-condensed ">
             <thead>
             <tr>
                 <th>邀请码</th>
@@ -34,7 +39,7 @@
         </table>
 
         <div class="form-group">
-            <div class="col-sm-3">
+            <div class="col-sm-5">
                 <input class="form-control" id="add_cdk" name="cdkNum"/>
                 <br>
                 <button type="button" class="btn btn-info" id="add_cdk_btn">添加邀请码</button>
@@ -44,13 +49,32 @@
 
     </div>
 
-
+    <div class="col-md-offset-1 col-sm-5">
+        <table class="table table-condensed">
+            <thead>
+            <tr>
+                <th>部门名</th>
+            </tr>
+            </thead>
+            <tbody id="addDeptInfo">
+            <tr>
+                <td>aaa</td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="col-sm-5">
+            <input class="form-control" id="add_dept" name="cdkNum"/>
+            <br>
+            <button type="button" class="btn btn-info" id="add_dept_btn">添加部门</button>
+        </div>
+    </div>
 </div>
 
 
 <script>
     $(function () {
         getAllCdks();
+        getDept("#addDeptInfo");
     });
 
 
@@ -62,24 +86,89 @@
             success: function (result) {
                 $.each(result.map.cdks, function (index, item) {
 
-                    var add = $("<td></td>").append(item.cdkNum)
+                    var add = $("<td></td>").append(item.cdkNum);
+                    var button= $("<td></td>").append($("<button class='btn btn-default btn-danger btn-sm btn-delete btn-cdk'>删除</button>")
+                        .attr("value",item.cdkNum));
 
-                    $("<tr></tr>").append(add).appendTo("#cdks");
+                    $("<tr></tr>").append(add).append(button).appendTo("#cdks");
                 });
 
             }
         });
     }
 
+    //添加cdk
     $("#add_cdk_btn").click(function () {
         $.ajax({
 
-            url: "/addCdk/"+$("#add_cdk").val(),
+            url: "/addCdk/" + $("#add_cdk").val(),
             type: "post",
+            success: function () {
+                getAllCdks();
+            }
+        });
+        $("#add_cdk").val("");
+    });
+
+    //删除cdk
+    $(document).on("click", ".btn-cdk", function () {
+        $.ajax({
+            url:"/cdk/" + $(this).attr("value"),
+            type:"post",
+            data:"_method=delete",
             success:function () {
                 getAllCdks();
             }
         });
+    });
+
+    /*得到部门的方法*/
+    function getDept(ele) {
+
+        /*防止重复*/
+        $(ele).empty();
+
+        $.ajax({
+            url: "/depts",
+            type: "get",
+            success: function (result) {
+                $.each(result.map.depts, function () {
+                    var dept = $("<tr></tr>").append($("<td></td>").append(this.deptName)).attr("value", this.deptId);
+                    var button= $("<td></td>").append($("<button class='btn btn-default btn-danger btn-sm btn-delete btn-dept'>删除</button>").attr("id", this.deptId));
+                    button.appendTo(dept);
+                    dept.appendTo(ele);
+                });
+            }
+        });
+    }
+
+    //添加部门
+    $("#add_dept_btn").click(function () {
+
+        $.ajax({
+            url: "/depts/"+ $("#add_dept").val(),
+            type:"post",
+            success:function () {
+                getDept("#addDeptInfo");
+            }
+        });
+        $("#add_dept").val("");
+
+    });
+
+
+    //删除部门
+    $(document).on("click",".btn-dept",function () {
+        if(confirm("确认要删除吗")){
+            $.ajax({
+                url:"/depts/"+ $(this).attr("id"),
+                data:"_method=delete",
+                type:"post",
+                success:function () {
+                    getDept("#addDeptInfo");
+                }
+            });
+        };
     });
 
 

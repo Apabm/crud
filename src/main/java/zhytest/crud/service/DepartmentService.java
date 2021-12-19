@@ -11,4 +11,7 @@ import zhytest.crud.bean.Department;
 
 
 public interface DepartmentService extends IService<Department> {
+    int addDept(Department department);
+    long getDeptNum();
+    int deleteDept(Integer deptId);
 }

@@ -30,4 +30,21 @@ public class DepartmentServiceImpl extends ServiceImpl<DepartmentMapper,Departme
         Department department = departmentMapper.selectByPrimaryKey(id);
         return department;
     }
+
+    @Override
+    public int addDept(Department department) {
+        int insert = departmentMapper.insert(department);
+        return insert;
+    }
+
+    public long getDeptNum(){
+        return departmentMapper.countByExample(null);
+    }
+
+    @Override
+    public int deleteDept(Integer deptId) {
+        return  departmentMapper.deleteByPrimaryKey(deptId);
+    }
+
+
 }

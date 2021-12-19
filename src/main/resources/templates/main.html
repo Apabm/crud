@@ -209,6 +209,43 @@
     </div>
 </div>
 
+<!--模糊查询模态框-->
+<div class="modal fade" id="likeSearchEmpModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">查询结果</h4>
+            </div>
+            <div class="modal-body">
+
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>员工ID</th>
+                                <th>员工姓名</th>
+                            </tr>
+                            </thead>
+                            <tbody id="addInfo">
+                            <tr>
+                                <td>aaaa</td>
+                                <td>15</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div class="container">
 
@@ -223,15 +260,20 @@
     <div class="row">
 
 
-        <div class="col-md-12">
-            <input type="text" id="search-id" placeholder="请输入员工号">
-            <button id="search-info">查询</button>
+        <div class="col-md-12 ">
+            <div class="col-sm-2">
+                <input type="text" class="form-control" id="search-id" placeholder="请输入员工号">
+            </div>
+
+            <button type="button" class="btn btn-info" id="search-info">查询</button>
         </div>
 
         <!--模糊查询-->
         <div class="col-md-12">
-            <input type="text" id="empName_like" placeholder="请输入员工的姓或名或姓名">
-            <button id="empName_like-info">查询</button>
+            <div class="col-sm-2">
+            <input type="text" class="form-control" id="empName_like" placeholder="请输入员工姓名">
+            </div>
+            <button type="button" class="btn btn-info" id="empName_like-info">查询</button>
         </div>
 
         <div class="col-md-4 col-md-offset-8">
@@ -748,10 +790,9 @@
                 $("#searchEmpModal").modal({
                     backdrop: "static",
                 });
-
             }
         });
-
+        $("#search-id").val("");
     });
 
     //查询中的修改按钮
@@ -781,6 +822,7 @@
 
     //模糊查询
     $("#empName_like-info").click(function () {
+        $("#addInfo").empty();
         $.ajax({
             url:"/selectLike/" + $("#empName_like").val() + "/" + $("#admin_department").val(),
             type:"get",
@@ -790,8 +832,16 @@
                     return false;
                 }
                 $.each(result.map.emps,function (index,item) {
-                    alert("员工id：" + item.empId + "  姓名：" + item.empName);
-                })
+
+                    var add = $("<tr></tr>").append($("<td></td>").append(item.empId)).append($("<td></td>").append(item.empName));
+                    add.appendTo("#addInfo");
+                });
+
+                $("#likeSearchEmpModal").modal({
+                    backdrop: "static",
+                });
+                $("#empName_like").val("");
+
             }
         });
     });

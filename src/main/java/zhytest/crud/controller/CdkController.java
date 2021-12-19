@@ -34,4 +34,14 @@ public class CdkController {
         return Msg.success();
     }
 
+    @DeleteMapping("/cdk/{cdk}")
+    @ResponseBody
+    public Msg deleteCdk(@PathVariable("cdk") String cdk){
+        boolean b = cdkService.deleteCdkNum(cdk);
+        if(b){
+            return Msg.success();
+        }else {
+            return Msg.fail();
+        }
+    }
 }

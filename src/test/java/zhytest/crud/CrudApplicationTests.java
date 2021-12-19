@@ -8,14 +8,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import zhytest.crud.bean.Admin;
 import zhytest.crud.bean.Cdk;
+import zhytest.crud.bean.Department;
 import zhytest.crud.bean.Employee;
 import zhytest.crud.mapper.AdminMapper;
+import zhytest.crud.mapper.DepartmentMapper;
 import zhytest.crud.mapper.EmployeeMapper;
 import zhytest.crud.mapper.RootMapper;
 import zhytest.crud.service.AdminService;
 import zhytest.crud.service.CdkService;
+import zhytest.crud.service.DepartmentService;
 import zhytest.crud.service.RootService;
 import zhytest.crud.service.impl.AdminServiceImpl;
+import zhytest.crud.service.impl.DepartmentServiceImpl;
 
 import java.util.List;
 
@@ -36,6 +40,18 @@ class CrudApplicationTests {
 
     @Autowired
     RootService rootService;
+
+    @Autowired
+    DepartmentMapper departmentMapper;
+
+
+    @Test
+    void deptTest(){
+        long l = departmentMapper.countByExample(null);
+        System.out.println("===================================");
+        System.out.println(l);
+        departmentMapper.insert(new Department(4,"条眼部"));
+    }
 
     @Test
     void contextLoads() {

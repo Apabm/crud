@@ -3,10 +3,7 @@ package zhytest.crud.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import zhytest.crud.bean.Department;
 import zhytest.crud.bean.Msg;
 import zhytest.crud.service.impl.DepartmentServiceImpl;
@@ -41,6 +38,31 @@ public class DepartmentController {
         return msg;
     }
 
+    @PostMapping("/depts/{deptName}")
+    @ResponseBody
+    public Msg addDept(@PathVariable("deptName")String deptName){
+        long deptNum = departmentService.getDeptNum();
+        int i = departmentService.addDept(new Department((int) (deptNum + 1), deptName));
+
+        if(i==1){
+            return Msg.success();
+        }else {
+            return Msg.fail();
+        }
+
+    }
+
+
+    @DeleteMapping("/depts/{deptId}")
+    @ResponseBody
+    public Msg deleteDept(@PathVariable("deptId")Integer deptId){
+        int num = departmentService.deleteDept(deptId);
+        if(num == 1){
+            return Msg.success();
+        }else{
+            return Msg.fail();
+        }
+    }
 
 
 
